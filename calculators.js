@@ -7,7 +7,7 @@
  * 
  * context.event.day - Contains the day for what the platform requires data
  * context.event.month - Contains the month for what the platform requires data
- * context.event.ywar - Contains the year for what the platform requires data
+ * context.event.year - Contains the year for what the platform requires data
  * 
  * API Calls: 
  * 
