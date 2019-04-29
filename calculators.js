@@ -33,7 +33,7 @@ export function calculatorQuantity(context)
   // sum up the quantity of the meters which are in a specific
   // resource group
   const quantity = meters
-  .filter(function(meter) { return meter.MeterResourceGroup === 'XXRG01';})
+  .filter(function(meter) { return meter.MeterResourceGroup === 'XRG01';})
   .map(function(meter) { return meter.MeterQuantity; })
   .reduce(function(result, meterQuantity) { return meterQuantity + result; }, 0); 
   // done
