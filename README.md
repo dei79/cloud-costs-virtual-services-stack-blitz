@@ -45,18 +45,14 @@ The simplest way to define a virtual meter could be a so-called fixed price mete
 In this example, we design the system in a way that at the 5th of the month the fee becomes applied. The quantity of this fee  should be just 1 because of the subscription ordered by the customer only one time: 
 
 ```js   
-  if (day === 5) {
-    return 1;
-  } else {
-    retrun 0;
-  }
+  return day === 5 ? 1 : 0;
 ```  
 
 ### Costs Calculator
 The example above ensures that the quantity is correctly calculated and only on the specific charging day the value is above 0 which means the costs calculator is straightforward by multiply the price with the quantity. In this example the price is 100,00€ will be multiplied with the quantity: 
 
 ```js   
-  return quanity * 100;
+  return quantity * 100;
 ```  
 
 ### Fixed Price Meter distributed daily
