@@ -13,20 +13,22 @@ appDiv.innerHTML = '                                              \
   </div>';
 
 // inject the api calls
-import('./api.js').then((api) => {
+import('./global.js').then((globalValue) => {
 
   // inject the calculators calls
   import('./calculators.js').then((calculators) => {
         
-    // build the context 
-    const context = {
-      event: { day: 0, month: 3, year: 2019 },
-      api: api
-    }
+    // set the context
+    calculators.setGlobalContext(globalValue);
 
     // find our table element
     var table = document.getElementById("dataTable");
 
+    // define the month 
+    var month = 4;
+    var year = 2019;
+
+    // visit every day
     for(let d = 1; d <= 31; d++) 
     {
       // Create an empty <tr> element and add it to the 1st position of the table:
@@ -38,13 +40,13 @@ import('./api.js').then((api) => {
       var quantityCell = row.insertCell(1);
 
       // calculate quantity
-      const dayQuantity = calculators.calculatorQuantity(context);        
+      const dayQuantity = calculators.calculatorQuantity(d, month, year);        
 
       // calculate the costs
-      const dayCosts = calculators.calculatorCosts(context, dayQuantity);
+      const dayCosts = calculators.calculatorCosts(d, month, year, dayQuantity);
 
       // Add some text to the new cells:
-      dayCell.innerHTML = context.event.year + '-' + context.event.month + '-' + d;
+      dayCell.innerHTML = year + '-' + month + '-' + d;
       quantityCell.innerHTML = dayQuantity;
       costsCell.innerHTML = dayCosts;
     }            

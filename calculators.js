@@ -1,60 +1,37 @@
-/* 
- * This functions demonstrate how to deal with the context of Virtual Services in Azure 
- * Costs. The context contains is the communication endpoint to the Costs Platform and 
- * structured as follows: 
- * 
- * Event-Information:
- * 
- * context.event.day - Contains the day for what the platform requires data
- * context.event.month - Contains the month for what the platform requires data
- * context.event.year - Contains the year for what the platform requires data
- * 
- * API Calls: 
- * 
- * context.api.getMeters() - Allows to receive all the meters which are usable.
- * 
- * Structure of a single meter
- * 
- * {
- *    ServiceId: 'Id of the Service',
- *    MeterId: 'ID of the Meter',
- *    MeterName: 'Name of the Meter',
- *    MeterRate: 'Price of the Meter',
- *    MeterQuantity: 'Amount of the Meter on the requested days',
- *    MeterResourceGroup: 'ResourceGroup the meter belongs to'    
- * }
- */
+// the global context
+var global = {};
 
-export function calculatorQuantity(context) 
+// quantity calculator
+export function calculatorQuantity(day, month, week) 
 {
-  // take the meters 
-  const meters = context.api.getMeters();
+  // request all related meters
+  const meters = global.getMeters();
   
-  // sum up the quantity of the meters which are in a specific
-  // resource group
-  const quantity = meters
-  .filter(function(meter) { return meter.MeterResourceGroup === 'XRG01';})
-  .map(function(meter) { return meter.MeterQuantity; })
-  .reduce(function(result, meterQuantity) { return meterQuantity + result; }, 0); 
-  // done
-  return quantity;
-}
+  // sum up the quantity of the meters which are in a specific resource group
+  const costs = meters
 
-export function calculatorCosts(context, quantity) 
-{
-  // take the meters 
-  const meters = context.api.getMeters();
-
-  // calculate the costs for all meters in the same resource MeterResourceGroup
-  let costs = meters
-    .filter((meter) => meter.MeterResourceGroup === 'RG01')
-    .map((meter) => meter.MeterRate * meter.MeterQuantity)
-    .reduce((result, meterCosts) => meterCosts + result); 
-
-  // uplift the price by 10%
-  costs = costs * 1.1;
-
-  // don
+    // filter the meters by resource group
+    .filter(function(meter) { return meter.MeterResourceGroup.toLowerCase() === 'rg01';})
+    
+    // map the complex model to the meter cost of the requested day becuase it makes 
+    // sense to give the customer a chance understanding what is the base of the uplift
+    .map(function(meter) { return meter.getCost(day); })
+    
+    // aggregate the cost with a js reduce funtion 
+    .reduce(function(result, meterCosts) { return meterCosts + result; }, 0); 
+    
+  // return the calculated costs as result
   return costs;
 }
 
+// costs calculator
+export function calculatorCosts(conday, month, week, quantity) 
+{
+  return quantity * 0.1;
+}
+
+// helper to emulte the global context
+export function setGlobalContext(globalValue)
+{
+  global = globalValue;
+}
