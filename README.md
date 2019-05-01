@@ -60,7 +60,31 @@ The example above ensures that the quantity is calculated correctly and only on 
 ```  
 
 ### Fixed Price Meter distributed on a daily basis
-<<TODO>>
+The pricing module fixed price distributed on a daily basis can be used to emulate for the customer a consumption based pricing on a daily basis event when the price is fixed. In our example the system takes the fixed price and figures out how long the current month is to distribute the fix prices along the month.
+
+#### Quantity Calculator
+The quantity calculator is very simple because the consumption is defined with the value 1.
+
+```js   
+  return 1;
+```  
+
+### Costs Calculator
+The costs calculator is the more complex part because it must be evaluated how long is the month to assign the right chunk to the daily costs. Every other mathematic function can be used as well to figure out the daily costs. 
+
+```js
+  // define the fixed prices
+  var fixedPrice = 100.0;
+
+  // get the days of the requested month
+  var daysInMonth = new Date(year, month, 0).getDate();
+
+  // divide the fix price in the right portions
+  var fixedPricePortion = fixedPrice / daysInMonth;
+
+  // multiple with the quantity and return 
+  return quantity * fixedPricePortion;
+```
   
 ### Consumption Based uplift for dedicated Resource Group
 The basic idea behind that example is to build a managed service which costs are related to the consumption of the cloud costs. Typically the uplift is generated on top of just a specific area of the costs, e.g. all services in a dedicated resource group. In adition the end user should get an idea what was the base value the price was calculated from. 
