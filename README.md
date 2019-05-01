@@ -44,9 +44,13 @@ As part of the global state the function getMeters returns a collection of meter
 ### Fixed Price Meter distributed on a daily basis
 <<TODO>>
   
-### Consumption Based Uplift for dedicated Resource Group
+### Consumption Based uplift for dedicated Resource Group
+The basic idea behind that example is to build a managed service which costs are related to the consumption of the cloud costs. Typically the uplift is generated on top of just a specific area of the costs, e.g. all services in a dedicated resource group. In adition the end user should get an idea what was the base value the price was calculated from. 
 
 #### Quantity Calculator
+In this example the quantity calculator aggregates all the costs of every meter which is related to the resource group RG01. We are using the costs to store this value as base costs in the quantity of the virtual meter. This gives the customer the transparency to understand what was the underlaying database to calculate the costs.
+
+Accessing to the meters happens via the gloabl context and the *getMeters* operation. A couple javascript functions are applied on the resulting array to build a simple map and reduce function as follows:
 
 ```js
   
@@ -57,7 +61,7 @@ As part of the global state the function getMeters returns a collection of meter
   const costs = meters
 
     // filter the meters by resource group
-    .filter(function(meter) { return meter.MeterResourceGroup === 'RG01';})
+    .filter(function(meter) { return meter.MeterResourceGroup.toLowerCase() === 'rg01';})
     
     // map the complex model to the meter cost of the requested day becuase it makes 
     // sense to give the customer a chance understanding what is the base of the uplift
@@ -69,7 +73,12 @@ As part of the global state the function getMeters returns a collection of meter
   // return the calculated costs as result
   return costs;
 ```  
-  
 
+### Costs Calculator
+The costs calculator in this example is responsible for building the uplift as self based on the base data stored in the quantity of the generated virtual meter. In this example an uplift of 15% is defined so the virtual meters will take 15% of the costs of the targeted resources as shown below:   
+
+```js 
+  return quantity * 0.15;
+```
 
 
