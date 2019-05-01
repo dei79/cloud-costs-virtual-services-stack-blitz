@@ -36,4 +36,15 @@ As part of the global state the function getMeters returns a collection of meter
 }
 ```
 
+## Examples
+
+### Fixed Price Meter at a specific date
+<<TODO>>
+  
+### Fixed Price Meter distributed on a daily basis
+<<TODO>>
+  
+### Consumption Based Uplift for dedicated Resource Group
+<<TODO>>
+
 
