@@ -2,8 +2,8 @@
 var global = {};
 
 // quantity calculator
-export function calculatorQuantity(day, month, week) 
-{
+export function calculatorQuantity(day, month, year) 
+{  
   // request all related meters
   const meters = global.getMeters();
   
@@ -21,17 +21,17 @@ export function calculatorQuantity(day, month, week)
     .reduce(function(result, meterCosts) { return meterCosts + result; }, 0); 
     
   // return the calculated costs as result
-  return costs;
+  return costs;  
 }
 
 // costs calculator
-export function calculatorCosts(conday, month, week, quantity) 
+export function calculatorCosts(day, month, year, quantity) 
 {
-  return quantity * 0.1;
+    return quantity * 0.15;
 }
 
 // helper to emulte the global context
 export function setGlobalContext(globalValue)
-{
+{    
   global = globalValue;
 }
