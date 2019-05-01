@@ -39,8 +39,26 @@ As part of the global state the function getMeters returns a collection of meter
 ## Examples
 
 ### Fixed Price Meter at a specific date
-<<TODO>>
-  
+The most simplest way to define a virtual meter could be a so called fixed price meter. This kind of meter adds a fee to the customers dashboard at a specific day in the month for a specific price. This could be used to define a 3rd party SaaS service, e.g. sending mails for 9,95€ pro month. 
+
+#### Quantity Calculator
+In this example we design the system in a way that at the 5th of the month the sure charge should happen. The quantity of this sure charge should be just 1 becuase the subscription was booked one times: 
+
+```js   
+  if (day === 5) {
+    return 1;
+  } else {
+    retrun 0;
+  }
+```  
+
+### Costs Calculator
+The example above ensures that the quantity is calculated correctly and only on the specific charging day the value is above 0 which means the costs calculator is very simple by just multiply the price with the quantity. In this example the price is 100,00€ which will be multiplied with the quanity: 
+
+```js   
+  return quanity * 100;
+```  
+
 ### Fixed Price Meter distributed on a daily basis
 <<TODO>>
   
