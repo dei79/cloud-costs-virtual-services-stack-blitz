@@ -10,12 +10,12 @@ Virtual Services are defined and declared based on JavaScript injection hooks to
 Cloud Costs offers two different calculator hook which is called for every day a calculation is required. 
 
 ```js
-function(day: number, month: number, year: number): number
+function(day: number, month: number, year: number, group: string): number
 ```
 The first hook described with his signature above is the so-called quantity hook and is intended to calculate the quantity of the virtual service meter. It must return a number as the value for the quantity. This hook can be found as function **calculatorQuantity** in the sandbox [here](https://stackblitz.com/edit/virtual-services-stack-blitz?file=calculators.js)
 
 ```js
-function(day: number, month: number, year: number, quantity: number): number
+function(day: number, month: number, year: number, quantity: number, group: string): number
 ```
 The second hook described with his signature above is the so-called cost hook and is intended to calculate the costs of a virtual service meter. This hook is always called after the quantity hook and contains the parameter quantity which is the result of the costs hook. It must return a number as the value for the costs as well. This hook can be found as function **calculatorCosts** in the sandbox [here](https://stackblitz.com/edit/virtual-services-stack-blitz?file=calculators.js)
 
@@ -36,6 +36,13 @@ As part of the global state, the function getMeters() returns a collection of me
 }
 ```
 
+## Multi Instance Meters (coming soon)
+Multi Instance Meters targets a specific requirements which are usualy comes up in more complex managed services. A Multi Instance Meter describes the logic that alle related resource meters are grouped by a specific property defined in the meter definition and every group results in a dedicated consumption meter as part of the resulting services. 
+
+It's possible to bail out one or more groups when returning a negative value in the quantity calculator. the global.getMeters() operation returns only the meters which are part of this group and the group parameter of the calculator function contains the value of the defined group.
+
+A more detailed example is described in the section Examples -> Consumption Based Uplift for Resource Groups with specific capabilities.
+
 ## Examples
 
 ### Fixed Price Meter at a specific date
@@ -48,7 +55,7 @@ In this example, we design the system in a way that at the 5th of the month the 
   return day === 5 ? 1 : 0;
 ```  
 
-### Costs Calculator
+#### Costs Calculator
 The example above ensures that the quantity is correctly calculated and only on the specific charging day the value is above 0 which means the costs calculator is straightforward by multiply the price with the quantity. In this example the price is 100,00€ will be multiplied with the quantity: 
 
 ```js   
@@ -65,7 +72,7 @@ The quantity calculator is straightforward because the consumption has a fixed v
   return 1;
 ```  
 
-### Costs Calculator
+#### Costs Calculator
 The costs calculator is the more complex part because it must be evaluated how long is the month to assign the right chunk to the daily costs. Every other mathematic function can be used as well to figure out the daily costs. 
 
 ```js
@@ -112,9 +119,30 @@ Accessing to the meters happens via the global context and the *getMeters* opera
   return costs;
 ```  
 
-### Costs Calculator
+#### Costs Calculator
 The costs calculator in this example is responsible for building the uplift as self-based on the base data stored in the quantity of the generated virtual meter. In this example an uplift of 15% is defined so the virtual meters will take 15% of the costs of the targeted resources as shown below:   
 
 ```js 
   return quantity * 0.15;
 ```
+
+### Consumption Based Uplift for Resource Groups with specific capabilities (coming soon)
+The idea behind this meter is very simlilar to the example before but not every meter should be uplifted and also a dedicated resource group is not know but the resource group contains in his name a capability flag. Using nomenclatures can be enforced esp. when the managed services is distributed autoamtically via ARM template or other services. This example is using the following definition:
+
+* Every Resource Group starting with the prefix "ms_" is relevant becuase it contains managed services
+* The capabilitiy flag is defined in the last two letters of the resourgroup, _pr means premium and _ul means ultimate
+
+The following examples illustrate how the rules will be applied: 
+
+* example_resource_group --> not relevant -> quantity calculator returns -1
+* ms_digital_trasnformation_project_pr --> relevant for the premium service, quantity calculator proces the quantity
+* ms_production_project_ul --> relevant for the ultimate service but this exmaple defines just the premium service so quantity calculator returns -1
+
+Calculators defined below are targeting the virtual service meter for the premium offering, the ultimate offering must be defined in a seperate service definition.
+
+#### Quantity Calculator
+TBD
+
+#### Costs Calculator
+TBD
+
