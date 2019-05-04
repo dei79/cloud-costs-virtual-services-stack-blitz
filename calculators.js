@@ -2,7 +2,7 @@
 var global = {};
 
 // quantity calculator
-export function calculatorQuantity(day, month, year) 
+export function calculatorQuantity(day, month, year, group) 
 {  
   // request all related meters
   const meters = global.getMeters();
@@ -25,7 +25,7 @@ export function calculatorQuantity(day, month, year)
 }
 
 // costs calculator
-export function calculatorCosts(day, month, year, quantity) 
+export function calculatorCosts(day, month, year, quantity, group) 
 {
     return quantity * 0.15;
 }

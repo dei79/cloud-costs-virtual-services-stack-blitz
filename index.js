@@ -40,10 +40,10 @@ import('./global.js').then((globalValue) => {
       var quantityCell = row.insertCell(1);
 
       // calculate quantity
-      const dayQuantity = calculators.calculatorQuantity(d, month, year);        
+      const dayQuantity = calculators.calculatorQuantity(d, month, year, undefined);        
 
       // calculate the costs
-      const dayCosts = calculators.calculatorCosts(d, month, year, dayQuantity);
+      const dayCosts = calculators.calculatorCosts(d, month, year, dayQuantity, undefined);
 
       // Add some text to the new cells:
       dayCell.innerHTML = year + '-' + month + '-' + d;
