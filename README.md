@@ -141,8 +141,42 @@ The following examples illustrate how the rules will be applied:
 Calculators defined below are targeting the virtual service meter for the premium offering, the ultimate offering must be defined in a seperate service definition.
 
 #### Quantity Calculator
-TBD
+The quantity calculator first of all needs to check of the defined group is relevant for this caluation following the rules defined in the description above. If not the quantity calculator should return a value lower than 0 which indicates this meter group should be ignored for the virtual service. 
+
+```js  
+  // verify if the meter is relevant for this group 
+  if (!group.startsWith('ms') || !group.endsWith('ul')) 
+  {
+    return -1;
+  }
+  
+  // request all related meters from the group
+  const meters = global.getMeters();
+  
+  // sum up the quantity of the meters which are in a specific resource group
+  const costs = meters
+    
+  // map the complex model to the meter cost of the requested day becuase it makes 
+  // sense to give the customer a chance understanding what is the base of the uplift
+  .map(function(meter) { return meter.getCost(day); })
+
+  // aggregate the cost with a js reduce funtion 
+  .reduce(function(result, meterCosts) { return meterCosts + result; }, 0); 
+    
+  // return the calculated costs as result
+  return costs;
+```  
 
 #### Costs Calculator
-TBD
+The costs calculator adds just the uplift defined for the given managed service but only when the quantity is above 0 other it's intended from the quantity calculator the this meter should be ignored. 
 
+```js  
+  // check if we have a positive quantity
+  if (quantity < 0) 
+  {
+    return 0;
+  }
+  
+  // define the uplift for the ultimate plan
+  return quantity * 0.15;  
+```  
