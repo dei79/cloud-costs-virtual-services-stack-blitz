@@ -36,7 +36,7 @@ As part of the global state, the function getMeters() returns a collection of me
 }
 ```
 
-## Multi Instance Meters (coming soon)
+## Multi Instance Meters
 Multi Instance Meters targets a specific requirements which are usualy comes up in more complex managed services. A Multi Instance Meter describes the logic that alle related resource meters are grouped by a specific property defined in the meter definition and every group results in a dedicated consumption meter as part of the resulting services. 
 
 It's possible to bail out one or more groups when returning a negative value in the quantity calculator. the global.getMeters() operation returns only the meters which are part of this group and the group parameter of the calculator function contains the value of the defined group.
@@ -126,7 +126,7 @@ The costs calculator in this example is responsible for building the uplift as s
   return quantity * 0.15;
 ```
 
-### Consumption Based Uplift for Resource Groups with specific capabilities (coming soon)
+### Consumption Based Uplift for Resource Groups with specific capabilities
 The idea behind this meter is very simlilar to the example before but not every meter should be uplifted and also a dedicated resource group is not know but the resource group contains in his name a capability flag. Using nomenclatures can be enforced esp. when the managed services is distributed autoamtically via ARM template or other services. This example is using the following definition:
 
 * Every Resource Group starting with the prefix "ms_" is relevant becuase it contains managed services
