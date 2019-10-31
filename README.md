@@ -36,6 +36,16 @@ As part of the global state, the function getMeters() returns a collection of me
 }
 ```
 
+### global.getCustomerProfile()
+As part of the global state the function getCustomerProfile() reflects the customer which is associated with a dedicated meter instanace. The following properties are available in the profile: 
+
+```js
+{
+  Name: 'Name of the Customer',
+  TeamMembers: ['UserId', 'UserId', '...']
+}
+```
+
 ## Multi Instance Meters
 Multi Instance Meters targets a specific requirements which are usualy comes up in more complex managed services. A Multi Instance Meter describes the logic that alle related resource meters are grouped by a specific property defined in the meter definition and every group results in a dedicated consumption meter as part of the resulting services. 
 
